@@ -27,7 +27,6 @@ public class RepairDataAdapter extends RecyclerView.Adapter<RepairDataAdapter.Vi
         this.objects = objects;
     }
 
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
