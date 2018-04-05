@@ -1,5 +1,6 @@
 package com.example.abhisheksingh.fireapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,9 +15,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
-public class MasterDetailActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+public class MasterDetailActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private TextView name;
+    private TextView phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +35,7 @@ public class MasterDetailActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Send this data via email", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -42,8 +48,22 @@ public class MasterDetailActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.setCheckedItem(R.id.nav_add_view_repair);
-        loadFragment(new RepairDataFragment());
-        navigationView.setNavigationItemSelectedListener(this);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null)
+        {
+            loadFragment(new RepairDataFragment());
+            navigationView.setNavigationItemSelectedListener(this);
+            View header=navigationView.getHeaderView(0);
+            /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
+            phoneNumber = (TextView)header.findViewById(R.id.tv_phone_num);
+            phoneNumber.setText(user.getPhoneNumber());
+        }
+        else
+        {
+            Intent logoutIntent = new Intent(this,LoginActivity.class);
+            startActivity(logoutIntent);
+        }
+
     }
 
     @Override
@@ -89,13 +109,20 @@ public class MasterDetailActivity extends AppCompatActivity
         } else if (id == R.id.nav_edit) {
 
         } else if (id == R.id.nav_logout) {
-
+         logout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    private void logout() {
+        FirebaseAuth.getInstance().signOut();
+        Intent logoutIntent = new Intent(this,LoginActivity.class);
+        startActivity(logoutIntent);
+    }
+
     public void loadFragment(Fragment fragment)
     {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager()

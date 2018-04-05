@@ -3,6 +3,7 @@ package com.example.abhisheksingh.fireapp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 
@@ -66,45 +67,60 @@ public class LoginActivity extends Activity{
         edtPhoneNumber = findViewById(R.id.edt_phone_num);
         edtOtp = findViewById(R.id.edt_otp);
         btnHandleOtp = findViewById(R.id.btn_login);
-       final PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            @Override
-            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                signInWithPhoneAuthCredential(phoneAuthCredential);
-            }
-
-            @Override
-            public void onVerificationFailed(FirebaseException e) {
-                Toast.makeText( LoginActivity.this,"Verification Failed! Please try again",Toast.LENGTH_LONG).show();
-
-            }
-
-           @Override
-           public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-               super.onCodeSent(verificationId, forceResendingToken);
-               edtOtp.setVisibility(View.VISIBLE);
-               LoginActivity.this.verificationId = verificationId;
-               Toast.makeText( LoginActivity.this,"Otp has been sent to your number",Toast.LENGTH_LONG).show();
-           }
-       };
-
-        btnHandleOtp.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (edtOtp.getVisibility() == View.VISIBLE)
-                {
-                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, edtOtp.getText().toString());
-                    signInWithPhoneAuthCredential(credential);
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null)
+        {
+            finishLogin();
+        }
+        else
+        {
+            final PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                @Override
+                public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                    signInWithPhoneAuthCredential(phoneAuthCredential);
                 }
-                else
-                {
-                    PhoneAuthProvider.getInstance().verifyPhoneNumber("+91"+edtPhoneNumber.getText().toString(), 120, TimeUnit.SECONDS, LoginActivity.this
-                            , mCallbacks);
+
+                @Override
+                public void onVerificationFailed(FirebaseException e) {
+                    Toast.makeText( LoginActivity.this,"Verification Failed! Please try again",Toast.LENGTH_LONG).show();
+
                 }
-            }
 
-        });
+                @Override
+                public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                    super.onCodeSent(verificationId, forceResendingToken);
+                    edtOtp.setVisibility(View.VISIBLE);
+                    LoginActivity.this.verificationId = verificationId;
+                    Toast.makeText( LoginActivity.this,"Otp has been sent to your number",Toast.LENGTH_LONG).show();
+                }
+            };
+
+            btnHandleOtp.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (edtOtp.getVisibility() == View.VISIBLE)
+                    {
+                        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, edtOtp.getText().toString());
+                        signInWithPhoneAuthCredential(credential);
+                    }
+                    else
+                    {
+                        PhoneAuthProvider.getInstance().verifyPhoneNumber("+91"+edtPhoneNumber.getText().toString(), 120, TimeUnit.SECONDS, LoginActivity.this
+                                , mCallbacks);
+                    }
+                }
+
+            });
 
 
+        }
+
+    }
+
+    private void finishLogin() {
+        Intent loginSuccessIntent = new Intent(this,MasterDetailActivity.class);
+        startActivity(loginSuccessIntent);
+        finish();
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
@@ -118,12 +134,20 @@ public class LoginActivity extends Activity{
                             Log.d(TAG, "signInWithCredentialfA:success");
 
                             FirebaseUser user = task.getResult().getUser();
+                            if (user != null)
+                            {
+                                finishLogin();
+                            }
                             // ...
                         } else {
                             // Sign in failed, display a message and update the UI
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
+                                Toast.makeText(LoginActivity.this,"Invalid verification code",Toast.LENGTH_LONG);
+                            }
+                            else {
+                                Toast.makeText(LoginActivity.this,"Login failed,please try again",Toast.LENGTH_LONG);
                             }
                         }
                     }
