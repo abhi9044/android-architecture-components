@@ -30,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,8 @@ public class LoginActivity extends Activity{
     private EditText edtOtp;
     private Button btnHandleOtp;
     private String verificationId;
+    private ProgressBar mProgressBar;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class LoginActivity extends Activity{
         edtPhoneNumber = findViewById(R.id.edt_phone_num);
         edtOtp = findViewById(R.id.edt_otp);
         btnHandleOtp = findViewById(R.id.btn_login);
+        mProgressBar = findViewById(R.id.progress_bar);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null)
         {
@@ -78,11 +82,13 @@ public class LoginActivity extends Activity{
                 @Override
                 public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
                     signInWithPhoneAuthCredential(phoneAuthCredential);
+                    mProgressBar.setVisibility(View.GONE);
                 }
 
                 @Override
                 public void onVerificationFailed(FirebaseException e) {
                     Toast.makeText( LoginActivity.this,"Verification Failed! Please try again",Toast.LENGTH_LONG).show();
+                    mProgressBar.setVisibility(View.GONE);
 
                 }
 
@@ -90,7 +96,9 @@ public class LoginActivity extends Activity{
                 public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                     super.onCodeSent(verificationId, forceResendingToken);
                     edtOtp.setVisibility(View.VISIBLE);
+                    btnHandleOtp.setText("Login");
                     LoginActivity.this.verificationId = verificationId;
+                    mProgressBar.setVisibility(View.GONE);
                     Toast.makeText( LoginActivity.this,"Otp has been sent to your number",Toast.LENGTH_LONG).show();
                 }
             };
@@ -102,11 +110,13 @@ public class LoginActivity extends Activity{
                     {
                         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, edtOtp.getText().toString());
                         signInWithPhoneAuthCredential(credential);
+                        mProgressBar.setVisibility(View.VISIBLE);
                     }
                     else
                     {
                         PhoneAuthProvider.getInstance().verifyPhoneNumber("+91"+edtPhoneNumber.getText().toString(), 120, TimeUnit.SECONDS, LoginActivity.this
                                 , mCallbacks);
+                        mProgressBar.setVisibility(View.VISIBLE);
                     }
                 }
 

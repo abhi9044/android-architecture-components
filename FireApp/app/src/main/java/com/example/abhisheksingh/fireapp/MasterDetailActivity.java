@@ -107,6 +107,7 @@ public class MasterDetailActivity extends AppCompatActivity implements Navigatio
         if (id == R.id.nav_add_view_repair) {
             loadFragment(new RepairDataFragment());
         } else if (id == R.id.nav_edit) {
+            loadFragment(new EditReportDataFragment());
 
         } else if (id == R.id.nav_logout) {
          logout();
@@ -127,9 +128,8 @@ public class MasterDetailActivity extends AppCompatActivity implements Navigatio
     {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager()
                 .beginTransaction();
-
-        fragmentTransaction.add(R.id.lnr,fragment);
-        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.replace(R.id.lnr,fragment);
+//        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 }

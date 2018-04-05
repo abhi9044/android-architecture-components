@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -24,10 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
+import static com.example.abhisheksingh.fireapp.Constants.baseUrl;
 
 public class RepairDataFragment extends Fragment {
-
-    final String baseUrl = "https://fireapp-daab6.firebaseio.com/";
     private Button btnSendData;
     private EditText edtHallNumber;
     private EditText edtDoors;
@@ -35,6 +35,7 @@ public class RepairDataFragment extends Fragment {
     private EditText edtTables;
     private RecyclerView recyclerView;
     private DatabaseReference globaRef;
+    private ProgressBar mProgressBar;
     private RepairDataAdapter repairDataAdapter;
     private List<RepairData> repairDataList;
     private OnFragmentInteractionListener mListener;
@@ -69,10 +70,12 @@ public class RepairDataFragment extends Fragment {
         edtDoors = (EditText)view.findViewById(R.id.edtUnRepairedDoors);
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
         globaRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl);
+        mProgressBar = view.findViewById(R.id.progress_bar);
         repairDataAdapter = new RepairDataAdapter(getActivity(),new ArrayList<RepairData>());
         repairDataAdapter.setData(new ArrayList<RepairData>());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), VERTICAL,false));
         recyclerView.setAdapter(repairDataAdapter);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         btnSendData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +93,7 @@ public class RepairDataFragment extends Fragment {
                 }
 
                 repairDataAdapter.setData(repairDataList);
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
