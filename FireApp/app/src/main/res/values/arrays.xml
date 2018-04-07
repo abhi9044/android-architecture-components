@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="work">
+        <item>SELECT</item>
+        <item>NORTH PAVILION</item>
+        <item>SOUTH PAVILION</item>
+        <item>EAST GALLERY</item>
+        <item>WEST GALLERY</item>
+        <item>ADMIN BLOCK</item>
+    </string-array>
+
+    <string-array name="north_pavilion">
+        <item>OUTER PERIFERRY</item>
+        <item>GROUND FLOOR</item>
+        <item>MEDIA BOX</item>
+        <item>SECOND FLOOR</item>
+        <item>THIRD FLOOR</item>
+    </string-array>
+
+    <string-array name="south_pavilion">
+        <item>OUTER PERIFERRY</item>
+        <item>GROUND FLOOR</item>
+        <item>FIRST FLOOR</item>
+        <item>SECOND FLOOR</item>
+        <item>CORPORATE BOXES</item>
+        <item>THIRD FLOOR</item>
+    </string-array>
+
+    <string-array name="east_pavilion">
+        <item>OUTER PERIFERRY</item>
+        <item>GROUND FLOOR</item>
+        <item>FIRST FLOOR</item>
+        <item>SECOND FLOOR</item>
+    </string-array>
+
+    <string-array name="west_pavilion">
+        <item>OUTER PERIFERRY</item>
+        <item>GROUND FLOOR</item>
+        <item>FIRST FLOOR</item>
+        <item>SECOND FLOOR</item>
+    </string-array>
+
+    <string-array name="admin_block">
+        <item>GROUND FLOOR</item>
+        <item>FIRST FLOOR</item>
+        <item>SECOND FLOOR</item>
+        <item>THIRD FLOOR</item>
+    </string-array>
+    <string-array name="common_issues">
+        <item>INFRASTRUCTURE</item>
+        <item>CHAIR MAINTAINACE</item>
+        <item>ELECTRICITY</item>
+        <item>HOUSEKEEPING</item>
+        <item>ANY OTHER SPECIFIC ISSUES</item>
+    </string-array>
+    <string-array name="infrastructure">
+        <item>CIVIL</item>
+        <item>LIFT</item>
+        <item>PLUMBING</item>
+        <item>DRAINAGE</item>
+    </string-array>
+    <string-array name="chair_maintenance">
+        <item>Block No.</item>
+        <item>Seat No.</item>
+    </string-array>
+    <string-array name="electricity">
+        <item>AC</item>
+        <item>LIGHT</item>
+        <item>FAN</item>
+        <item>WIRING</item>
+        <item>ANY OTHER</item>
+    </string-array>
+    <string-array name="house_keeping">
+        <item>DUSTING</item>
+        <item>DRY MOP</item>
+        <item>DEEP CLEANING</item>
+        <item>WET MOP</item>
+        <item>CHAIR POLISH</item>
+        <item>TOILETS</item>
+    </string-array>
+</resources>

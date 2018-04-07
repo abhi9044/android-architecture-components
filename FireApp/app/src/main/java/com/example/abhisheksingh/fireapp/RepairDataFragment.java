@@ -1,6 +1,5 @@
 package com.example.abhisheksingh.fireapp;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -20,14 +22,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
 import static com.example.abhisheksingh.fireapp.Constants.baseUrl;
 
-public class RepairDataFragment extends Fragment {
+public class RepairDataFragment extends Fragment implements View.OnClickListener{
     private Button btnSendData;
     private EditText edtHallNumber;
     private EditText edtDoors;
@@ -38,6 +43,10 @@ public class RepairDataFragment extends Fragment {
     private ProgressBar mProgressBar;
     private RepairDataAdapter repairDataAdapter;
     private List<RepairData> repairDataList;
+    private MaterialSpinner spnrWork;
+    private MaterialSpinner spnr2;
+    private MaterialSpinner spnr3;
+    private RadioGroup radioGroup;
     private OnFragmentInteractionListener mListener;
 
     public RepairDataFragment() {
@@ -63,12 +72,17 @@ public class RepairDataFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =   inflater.inflate(R.layout.fragment_repair_data, container, false);
-        btnSendData = (Button)view.findViewById(R.id.btnSendData);
-        edtHallNumber = (EditText)view.findViewById(R.id.edtHallId);
-        edtChairs = (EditText)view.findViewById(R.id.edtUnRepairedChairs);
-        edtTables = (EditText)view.findViewById(R.id.edtUnrepairedTables);
-        edtDoors = (EditText)view.findViewById(R.id.edtUnRepairedDoors);
-        recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
+        btnSendData = view.findViewById(R.id.btnSendData);
+        edtHallNumber = view.findViewById(R.id.edtHallId);
+        edtChairs = view.findViewById(R.id.edtUnRepairedChairs);
+        edtTables = view.findViewById(R.id.edtUnrepairedTables);
+        edtDoors = view.findViewById(R.id.edtUnRepairedDoors);
+        spnrWork =  view.findViewById(R.id.spnr_work);
+        spnr2 =  view.findViewById(R.id.spnr2);
+        spnr3 = view.findViewById(R.id.spnr3);
+        radioGroup = view.findViewById(R.id.radiogroup);
+        spnrWork.setItems(getResources().getStringArray(R.array.work));
+        recyclerView = view.findViewById(R.id.recyclerView);
         globaRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl);
         mProgressBar = view.findViewById(R.id.progress_bar);
         repairDataAdapter = new RepairDataAdapter(getActivity(),new ArrayList<RepairData>());
@@ -76,13 +90,64 @@ public class RepairDataFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), VERTICAL,false));
         recyclerView.setAdapter(repairDataAdapter);
         mProgressBar.setVisibility(View.VISIBLE);
-
-        btnSendData.setOnClickListener(new View.OnClickListener() {
+        spnrWork.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                writeData(edtHallNumber.getText().toString(),Integer.parseInt(edtChairs.getText().toString()),Integer.parseInt(edtTables.getText().toString()),Integer.parseInt(edtDoors.getText().toString()));
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                if (item.toString() == "SELECT") {
+                    spnr2.setVisibility(View.GONE);
+                    spnr3.setVisibility(View.GONE);
+                } else {
+                    spnr2.setVisibility(View.VISIBLE);
+                    spnr3.setVisibility(View.VISIBLE);
+                    spnr3.setItems(getResources().getStringArray(R.array.common_issues));
+                    switch (item.toString()) {
+                        case "NORTH PAVILION":
+                            spnr2.setItems(getResources().getStringArray(R.array.north_pavilion));
+                            break;
+                        case "SOUTH PAVILION":
+                            spnr2.setItems(getResources().getStringArray(R.array.south_pavilion));
+                            break;
+                        case "EAST GALLERY":
+                            spnr2.setItems(getResources().getStringArray(R.array.east_pavilion));
+                            break;
+                        case "WEST GALLERY":
+                            spnr2.setItems(getResources().getStringArray(R.array.west_pavilion));
+                            break;
+                        case "ADMIN BLOCK":
+                            spnr2.setItems(getResources().getStringArray(R.array.admin_block));
+                            break;
+                    }
+                }
             }
         });
+
+        spnr2.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                spnr3.setItems(getResources().getStringArray(R.array.common_issues));
+                addRadioButtons("INFRASTRUCTURE");
+            }
+        });
+       spnr3.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+           @Override
+           public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+               switch (item.toString())
+               {
+                   case ("INFRASTRUCTURE"):
+                       addRadioButtons("INFRASTRUCTURE");
+                       break;
+                   case("CHAIR MAINTAINACE"):
+                       addRadioButtons("CHAIR MAINTAINACE");
+                       break;
+                   case("ELECTRICITY"):
+                       addRadioButtons("ELECTRICITY");
+                       break;
+                   case("HOUSEKEEPING"):
+                       addRadioButtons("HOUSEKEEPING");
+                       break;
+               }
+           }
+       });
         Query myTopPostsQuery = globaRef;
         myTopPostsQuery.addValueEventListener(new ValueEventListener() {
             @Override
@@ -91,7 +156,6 @@ public class RepairDataFragment extends Fragment {
                 for (DataSnapshot repairData: dataSnapshot.getChildren()) {
                     repairDataList.add(repairData.getValue(RepairData.class));
                 }
-
                 repairDataAdapter.setData(repairDataList);
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
@@ -111,6 +175,40 @@ public class RepairDataFragment extends Fragment {
             mListener.onFragmentInteraction(uri);
         }
     }
+    public void addRadioButtons(String option) {
+
+        for (int row = 0; row < 1; row++) {
+            RadioGroup ll = new RadioGroup(getActivity());
+            ll.setOrientation(LinearLayout.HORIZONTAL);
+             String []array = new String[0];
+
+            switch (option)
+            {
+                case ("INFRASTRUCTURE"):
+                    array = Arrays.copyOf(getResources().getStringArray(R.array.infrastructure),getResources().getStringArray(R.array.chair_maintenance).length);
+                    break;
+                case("CHAIR MAINTAINACE"):
+                    array = getResources().getStringArray(R.array.chair_maintenance);
+                    break;
+                case("ELECTRICITY"):
+                    array = getResources().getStringArray(R.array.electricity);
+                    break;
+                case("HOUSEKEEPING"):
+                    array = getResources().getStringArray(R.array.house_keeping);
+
+                    break;
+            }
+
+            for (int i = 0; i < array.length; i++) {
+                RadioButton rdbtn = new RadioButton(getActivity());
+                rdbtn.setId((row * 2) + i);
+                rdbtn.setText(array[i]);
+                ll.addView(rdbtn);
+            }
+          radioGroup.addView(ll);
+        }
+
+    }
 
     private void writeData(String hallId, int chairs, int tables, int doors) {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl + hallId);
@@ -126,6 +224,16 @@ public class RepairDataFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId())
+        {
+            case R.id.btnSendData:
+                writeData(edtHallNumber.getText().toString(),Integer.parseInt(edtChairs.getText().toString()),Integer.parseInt(edtTables.getText().toString()),Integer.parseInt(edtDoors.getText().toString()));
+                break;
+        }
     }
 
     public interface OnFragmentInteractionListener {

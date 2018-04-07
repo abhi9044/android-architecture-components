@@ -5,20 +5,32 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_add_view_repair"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Add/View Repair Data" />
+            android:id="@+id/nav_work"
+            android:icon="@drawable/ic_work"
+            android:title="Work" />
     </group>
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_edit"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Edit Repair Data" />
+            android:id="@+id/nav_stock"
+            android:icon="@drawable/ic_stock"
+            android:title="Stock" />
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_imp_issue"
+            android:icon="@drawable/ic_imp_issue"
+            android:title="Important Issue" />
+    </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_reports"
+            android:icon="@drawable/ic_reports"
+            android:title="Reports" />
     </group>
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_logout"
-            android:icon="@drawable/ic_menu_send"
+            android:icon="@drawable/ic_logout"
             android:title="Logout" />
     </group>
 

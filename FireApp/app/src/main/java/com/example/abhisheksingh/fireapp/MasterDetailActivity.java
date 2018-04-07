@@ -47,7 +47,8 @@ public class MasterDetailActivity extends AppCompatActivity implements Navigatio
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(0).setChecked(true);
-        navigationView.setCheckedItem(R.id.nav_add_view_repair);
+        navigationView.setCheckedItem(R.id.nav_work);
+        navigationView.setItemIconTintList(null);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null)
         {
@@ -104,9 +105,17 @@ public class MasterDetailActivity extends AppCompatActivity implements Navigatio
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_add_view_repair) {
+        if (id == R.id.nav_work) {
             loadFragment(new RepairDataFragment());
-        } else if (id == R.id.nav_edit) {
+        } else if (id == R.id.nav_stock) {
+            loadFragment(new EditReportDataFragment());
+
+        }
+        else if (id == R.id.nav_reports) {
+            loadFragment(new EditReportDataFragment());
+
+        }
+        else if (id == R.id.nav_imp_issue) {
             loadFragment(new EditReportDataFragment());
 
         } else if (id == R.id.nav_logout) {
