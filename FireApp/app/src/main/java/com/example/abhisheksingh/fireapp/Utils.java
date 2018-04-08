@@ -15,16 +15,9 @@ public class Utils {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 
-    public static void writeToFile(String data)
+    public static void writeToFile(String data,File path,String name)
     {
         // Get the directory for the user's public pictures directory.
-        final File path =
-                Environment.getExternalStoragePublicDirectory
-                        (
-                                //Environment.DIRECTORY_PICTURES
-                                Environment.DIRECTORY_DCIM + "/CSV/"
-                        );
-
         // Make sure the path directory exists.
         if(!path.exists())
         {
@@ -32,7 +25,7 @@ public class Utils {
             path.mkdirs();
         }
 
-        final File file = new File(path, System.currentTimeMillis()+"sample.csv");
+        final File file = new File(path,name);
 
         // Save your stream, don't forget to flush() it before closing it.
 
