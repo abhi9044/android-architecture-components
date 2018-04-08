@@ -21,18 +21,23 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
@@ -55,9 +60,15 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
     private MaterialSpinner spnrWork;
     private MaterialSpinner spnr2;
     private MaterialSpinner spnr3;
+    private String workCat1;
+    private String workCat2;
+    private String workCat3;
+    private File file;
     private EditText edtIssueDescription;
     private RadioGroup radioGroup;
     private ImageButton imgButton;
+    private StorageReference storageReference;
+    private FirebaseStorage firebaseStorage;
     private ImageView imgIssue;
     private OnFragmentInteractionListener mListener;
 
@@ -99,6 +110,7 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
         spnrWork.setItems(getResources().getStringArray(R.array.work));
         recyclerView = view.findViewById(R.id.recyclerView);
         globaRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl);
+        firebaseStorage = FirebaseStorage.getInstance();
         mProgressBar = view.findViewById(R.id.progress_bar);
         repairDataAdapter = new RepairDataAdapter(getActivity(),new ArrayList<RepairData>());
         repairDataAdapter.setData(new ArrayList<RepairData>());
@@ -110,7 +122,8 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
         spnrWork.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
-                if (item.toString() == "SELECT") {
+                workCat1 = item.toString();
+                if (item.toString().equals("SELECT")) {
                     spnr2.setVisibility(View.GONE);
                     spnr3.setVisibility(View.GONE);
                     edtIssueDescription.setVisibility(View.GONE);
@@ -145,6 +158,7 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
         spnr2.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                workCat2 = item.toString();
                 spnr3.setItems(getResources().getStringArray(R.array.common_issues));
 
             }
@@ -152,6 +166,7 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
        spnr3.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
            @Override
            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+               workCat3 = item.toString();
                switch (item.toString())
                {
                    case ("INFRASTRUCTURE"):
@@ -233,16 +248,25 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
 
     }
 
-    private void writeData(String hallId, int chairs, int tables, int doors) {
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl + hallId);
-        RepairData data = new RepairData(hallId,chairs,tables,doors);
+    private void writeData(RepairData data) {
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl + data.hallId);
         myRef.setValue(data);
+        mProgressBar.setVisibility(View.GONE);
         Toast.makeText(getActivity(),"Data Updated Successfully",Toast.LENGTH_SHORT).show();
-        edtHallNumber.setText("");
-        edtTables.setText("");
-        edtChairs.setText("");
-        edtDoors.setText("");
+        resetView();
     }
+
+    private void resetView() {
+        spnrWork.setSelectedIndex(0);
+        spnr2.setVisibility(View.GONE);
+        spnr3.setVisibility(View.GONE);
+        edtIssueDescription.setVisibility(View.GONE);
+        imgButton.setVisibility(View.GONE);
+        imgIssue.setImageResource(0);
+        imgIssue.setVisibility(View.GONE);
+        radioGroup.removeAllViews();
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
@@ -261,6 +285,7 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
+                file = imageFile;
                 Uri uri = Uri.fromFile(imageFile);
                 imgIssue.setImageURI(uri);
                 imgIssue.setVisibility(View.VISIBLE);
@@ -274,7 +299,23 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
         switch (view.getId())
         {
             case R.id.btnSendData:
-               // writeData(edtHallNumber.getText().toString(),Integer.parseInt(edtChairs.getText().toString()),Integer.parseInt(edtTables.getText().toString()),Integer.parseInt(edtDoors.getText().toString()));
+                mProgressBar.setVisibility(View.VISIBLE);
+                final RepairData data = new RepairData();
+                data.hallId = String.valueOf(System.currentTimeMillis());
+                data.workCat1 = workCat1;
+                data.workCat2 = workCat2;
+                data.workCat3 = workCat3;
+                data.issueDescription = edtIssueDescription.getText().toString();
+                storageReference = firebaseStorage.getReference( "images");
+                final StorageReference photoRef = storageReference.child(data.hallId);
+                photoRef.putFile(Uri.fromFile(file)).addOnSuccessListener(getActivity(), new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        data.imageUrl = taskSnapshot.getDownloadUrl().toString();
+                        Toast.makeText(getContext(),"Image Uploaded Successfully",Toast.LENGTH_SHORT).show();
+                        writeData(data);
+                    }
+                });
                 break;
 
             case R.id.img_take_picture:

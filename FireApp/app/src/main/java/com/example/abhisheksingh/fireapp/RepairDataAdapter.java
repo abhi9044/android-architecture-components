@@ -59,9 +59,6 @@ public class RepairDataAdapter extends RecyclerView.Adapter<RepairDataAdapter.Vi
 
     private void initializeViews(RepairData data, ViewHolder holder) {
         holder.tvHallId.setText(data.hallId);
-        holder.tvUnRepairedChairs.setText(data.unRepairedChairs+"");
-        holder.tvUnrepairedTables.setText(data.unRepairedTables+"");
-        holder.tvUnRepairedDoors.setText(data.unRepairedDoors+"");
 
         //TODO implement
     }

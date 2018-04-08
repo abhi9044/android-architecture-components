@@ -64,18 +64,27 @@ public class EditDataAdapter extends RecyclerView.Adapter<EditDataAdapter.ViewHo
 
     private void initializeViews(RepairData data, ViewHolder holder) {
         holder.edtHallId.setText(data.hallId);
-        holder.edtUnRepairedChairs.setText(data.unRepairedChairs+"");
-        holder.edtUnrepairedTables.setText(data.unRepairedTables+"");
-        holder.edtUnRepairedDoors.setText(data.unRepairedDoors+"");
+        holder.edtUnRepairedChairs.setText(data.workCat1+"");
+        holder.edtUnrepairedTables.setText(data.workCat2+"");
+        holder.edtUnRepairedDoors.setText(data.workCat3+"");
+        if (data.isPending){
+            holder.btnEdit.setBackground(context.getResources().getDrawable(R.drawable.button_bg_red));
+            holder.btnEdit.setText("Mark Completed");
+        }
+        else
+        {
+            holder.btnEdit.setBackground(context.getResources().getDrawable(R.drawable.button_bg_green));
+            holder.btnEdit.setText("Completed");
+        }
 
         //TODO implement
     }
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
-        private EditText edtHallId;
-        private EditText edtUnRepairedChairs;
-        private EditText edtUnRepairedDoors;
-        private EditText edtUnrepairedTables;
+        private TextView edtHallId;
+        private TextView edtUnRepairedChairs;
+        private TextView edtUnRepairedDoors;
+        private TextView edtUnrepairedTables;
         private Button btnEdit;
         private Button btnDelete;
         private View lnrBg;
@@ -93,29 +102,15 @@ public class EditDataAdapter extends RecyclerView.Adapter<EditDataAdapter.ViewHo
             btnEdit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (btnEdit.getText().toString().equals("Edit"))
+                    if (btnEdit.getText().toString().equalsIgnoreCase("MARK COMPLETED"))
                     {
-                        btnEdit.setText("Update");
-                        btnDelete.setVisibility(View.VISIBLE);
-                        edtUnRepairedChairs.setEnabled(true);
-                        edtUnRepairedDoors.setEnabled(true);
-                        edtUnrepairedTables.setEnabled(true);
-                        int padding = Utils.dpToPx(context,8);
-                        lnrBg.setBackgroundColor(Color.LTGRAY);
-                        lnrBg.setPadding(padding,padding,padding,padding);
+                        RepairData data = objects.get(getAdapterPosition());
+                        data.isPending = false;
+                        editData.editUserData(data);
+                        btnEdit.setBackground(context.getResources().getDrawable(R.drawable.button_bg_green));
+                        btnEdit.setText("Completed");
+                    }
 
-                    }
-                    else
-                    {
-                        btnEdit.setText("Edit");
-                        btnDelete.setVisibility(View.GONE);
-                        edtUnRepairedChairs.setEnabled(false);
-                        edtUnRepairedDoors.setEnabled(false);
-                        edtUnrepairedTables.setEnabled(false);
-                        lnrBg.setBackgroundColor(Color.WHITE);
-                        lnrBg.setPadding(0,0,0,0);
-                        editData.editUserData(objects.get(getAdapterPosition()).hallId,Integer.parseInt(edtUnRepairedChairs.getText().toString()),Integer.parseInt(edtUnrepairedTables.getText().toString()),Integer.parseInt(edtUnRepairedDoors.getText().toString()));
-                    }
                 }
             });
 
@@ -137,7 +132,7 @@ public class EditDataAdapter extends RecyclerView.Adapter<EditDataAdapter.ViewHo
     }
     public interface EditData
     {
-        void editUserData(String hallId,int unChairs,int unTables,int unDoors );
+        void editUserData(RepairData data);
         void deleteUserData(int pos);
     }
 }

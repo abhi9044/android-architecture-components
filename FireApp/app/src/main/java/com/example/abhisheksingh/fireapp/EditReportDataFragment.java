@@ -83,8 +83,7 @@ public class EditReportDataFragment extends Fragment implements EditDataAdapter.
 
 
     @Override
-    public void editUserData(String hallId, int unChairs, int unTables, int unDoors) {
-        RepairData data = new RepairData(hallId,unChairs,unTables,unDoors);
+    public void editUserData(RepairData data) {
         writeData(data);
     }
 
@@ -101,8 +100,7 @@ public class EditReportDataFragment extends Fragment implements EditDataAdapter.
     }
     private void writeData(RepairData data) {
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl + data.hallId);
-        RepairData newData = new RepairData(data.hallId,data.unRepairedChairs,data.unRepairedTables,data.unRepairedDoors);
-        myRef.setValue(newData);
+        myRef.setValue(data);
         Toast.makeText(getActivity(),"Data Updated Successfully",Toast.LENGTH_SHORT).show();
     }
 }

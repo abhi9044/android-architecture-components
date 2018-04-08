@@ -25,34 +25,15 @@
         tools:layout_editor_absoluteX="0dp">
 
         <TextView
-            android:id="@+id/tv_hall_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="HallId"
-            android:textStyle="bold" />
-
-        <TextView
             android:id="@+id/tv_seats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Seats"
+            android:text="Location"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_tables"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Tables"
-            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tv_doors"
@@ -61,7 +42,7 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Chairs"
+            android:text="Problem"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/tv_dos"

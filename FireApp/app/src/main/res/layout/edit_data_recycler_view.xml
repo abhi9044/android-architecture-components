@@ -7,71 +7,78 @@
     <LinearLayout
         android:id="@+id/lnr_bg"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:animateLayoutChanges="true"
         android:background="@android:color/white"
         android:orientation="horizontal">
 
-        <EditText
+        <TextView
             android:id="@+id/edt_hall_id"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
             android:gravity="center"
+            android:layout_marginRight="3dp"
             android:enabled="false"
+            android:visibility="gone"
+            android:textColor="@android:color/black"
             android:layout_gravity="center"
             android:text="HallId" />
 
-        <EditText
+        <TextView
             android:id="@+id/edt_seats"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:enabled="false"
+            android:layout_marginRight="3dp"
+            android:textColor="@android:color/black"
             android:inputType="number"
             android:layout_gravity="center"
-            android:text="Seats" />
+            android:text="Northern Pavillion" />
 
-        <EditText
+        <TextView
             android:id="@+id/edt_tables"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:inputType="number"
+            android:layout_marginRight="3dp"
             android:gravity="center"
+            android:visibility="gone"
+            android:textColor="@android:color/black"
             android:layout_gravity="center"
             android:enabled="false"
             android:text="Tables" />
 
-        <EditText
+        <TextView
             android:id="@+id/edt_doors"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
+            android:layout_marginRight="3dp"
+            android:textColor="@android:color/black"
             android:inputType="number"
             android:enabled="false"
             android:layout_gravity="center"
             android:text="Doors" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:animateLayoutChanges="true"
-            android:layout_height="30dp">
+
+
             <Button
-                android:id="@+id/btn_edit"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:layout_margin="5dp"
-                android:textColor="@android:color/white"
-                android:background="@drawable/button_bg"
-                android:text="Edit" />
+            android:id="@+id/btn_edit"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_weight=".9"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_margin="1dp"
+                android:padding="5dp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_bg_red"
+            android:text="Mark Completed" />
 
             <Button
                 android:id="@+id/btn_delete"
@@ -79,13 +86,13 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                android:layout_weight="1"
                 android:background="@drawable/button_bg"
                 android:gravity="center"
                 android:text="Delete"
+                android:textSize="6dp"
                 android:visibility="gone"
                 android:textColor="@android:color/white" />
-        </LinearLayout>
+
 
     </LinearLayout>
 </LinearLayout>

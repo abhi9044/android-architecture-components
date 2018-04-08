@@ -10,6 +10,7 @@
     </string-array>
 
     <string-array name="north_pavilion">
+        <item>SELECT</item>
         <item>OUTER PERIFERRY</item>
         <item>GROUND FLOOR</item>
         <item>MEDIA BOX</item>
