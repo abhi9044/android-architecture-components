@@ -1,5 +1,8 @@
 package com.example.abhisheksingh.fireapp;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
@@ -24,10 +29,14 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import java.io.File;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import pl.aprilapps.easyphotopicker.DefaultCallback;
+import pl.aprilapps.easyphotopicker.EasyImage;
 
 import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
 import static com.example.abhisheksingh.fireapp.Constants.baseUrl;
@@ -46,7 +55,10 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
     private MaterialSpinner spnrWork;
     private MaterialSpinner spnr2;
     private MaterialSpinner spnr3;
+    private EditText edtIssueDescription;
     private RadioGroup radioGroup;
+    private ImageButton imgButton;
+    private ImageView imgIssue;
     private OnFragmentInteractionListener mListener;
 
     public RepairDataFragment() {
@@ -77,6 +89,9 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
         edtChairs = view.findViewById(R.id.edtUnRepairedChairs);
         edtTables = view.findViewById(R.id.edtUnrepairedTables);
         edtDoors = view.findViewById(R.id.edtUnRepairedDoors);
+        edtIssueDescription = view.findViewById(R.id.edt_issue_description);
+        imgButton = view.findViewById(R.id.img_take_picture);
+        imgIssue = view.findViewById(R.id.img_issue);
         spnrWork =  view.findViewById(R.id.spnr_work);
         spnr2 =  view.findViewById(R.id.spnr2);
         spnr3 = view.findViewById(R.id.spnr3);
@@ -90,15 +105,21 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), VERTICAL,false));
         recyclerView.setAdapter(repairDataAdapter);
         mProgressBar.setVisibility(View.VISIBLE);
+        btnSendData.setOnClickListener(this);
+        imgButton.setOnClickListener(this);
         spnrWork.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 if (item.toString() == "SELECT") {
                     spnr2.setVisibility(View.GONE);
                     spnr3.setVisibility(View.GONE);
+                    edtIssueDescription.setVisibility(View.GONE);
+                    imgButton.setVisibility(View.GONE);
                 } else {
                     spnr2.setVisibility(View.VISIBLE);
                     spnr3.setVisibility(View.VISIBLE);
+                    edtIssueDescription.setVisibility(View.VISIBLE);
+                    imgButton.setVisibility(View.VISIBLE);
                     spnr3.setItems(getResources().getStringArray(R.array.common_issues));
                     switch (item.toString()) {
                         case "NORTH PAVILION":
@@ -125,7 +146,7 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
                 spnr3.setItems(getResources().getStringArray(R.array.common_issues));
-                addRadioButtons("INFRASTRUCTURE");
+
             }
         });
        spnr3.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
@@ -145,6 +166,8 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
                    case("HOUSEKEEPING"):
                        addRadioButtons("HOUSEKEEPING");
                        break;
+                       default:
+                           addRadioButtons("ANY OTHER SPECIFIC ISSUES");
                }
            }
        });
@@ -176,16 +199,15 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
         }
     }
     public void addRadioButtons(String option) {
-
-        for (int row = 0; row < 1; row++) {
+         radioGroup.removeAllViews();
+         for (int row = 0; row < 1; row++) {
             RadioGroup ll = new RadioGroup(getActivity());
-            ll.setOrientation(LinearLayout.HORIZONTAL);
+            ll.setOrientation(LinearLayout.VERTICAL);
              String []array = new String[0];
-
             switch (option)
             {
                 case ("INFRASTRUCTURE"):
-                    array = Arrays.copyOf(getResources().getStringArray(R.array.infrastructure),getResources().getStringArray(R.array.chair_maintenance).length);
+                    array = getResources().getStringArray(R.array.infrastructure);
                     break;
                 case("CHAIR MAINTAINACE"):
                     array = getResources().getStringArray(R.array.chair_maintenance);
@@ -195,8 +217,9 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
                     break;
                 case("HOUSEKEEPING"):
                     array = getResources().getStringArray(R.array.house_keeping);
-
                     break;
+                    default:
+                        radioGroup.removeAllViews();
             }
 
             for (int i = 0; i < array.length; i++) {
@@ -227,12 +250,35 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        EasyImage.handleActivityResult(requestCode, resultCode, data, getActivity(), new DefaultCallback() {
+            @Override
+            public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
+                //Some error handling
+                Toast.makeText(getContext(),"Some error occurred,please try again!",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
+                Uri uri = Uri.fromFile(imageFile);
+                imgIssue.setImageURI(uri);
+                imgIssue.setVisibility(View.VISIBLE);
+            }
+
+        });
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId())
         {
             case R.id.btnSendData:
-                writeData(edtHallNumber.getText().toString(),Integer.parseInt(edtChairs.getText().toString()),Integer.parseInt(edtTables.getText().toString()),Integer.parseInt(edtDoors.getText().toString()));
+               // writeData(edtHallNumber.getText().toString(),Integer.parseInt(edtChairs.getText().toString()),Integer.parseInt(edtTables.getText().toString()),Integer.parseInt(edtDoors.getText().toString()));
                 break;
+
+            case R.id.img_take_picture:
+                EasyImage.openChooserWithGallery(this,"Select",0);
         }
     }
 

@@ -47,6 +47,7 @@
         <item>THIRD FLOOR</item>
     </string-array>
     <string-array name="common_issues">
+        <item>SELECT</item>
         <item>INFRASTRUCTURE</item>
         <item>CHAIR MAINTAINACE</item>
         <item>ELECTRICITY</item>
@@ -60,8 +61,11 @@
         <item>DRAINAGE</item>
     </string-array>
     <string-array name="chair_maintenance">
-        <item>Block No.</item>
-        <item>Seat No.</item>
+        <item>SCREW FIXING</item>
+        <item>CHAIR REPLACE</item>
+        <item>SEAT NO PAINTING</item>
+        <item>FRAME REPAIR</item>
+        <item>OTHER</item>
     </string-array>
     <string-array name="electricity">
         <item>AC</item>
