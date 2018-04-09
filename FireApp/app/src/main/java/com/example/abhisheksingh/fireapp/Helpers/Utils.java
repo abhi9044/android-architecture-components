@@ -5,16 +5,32 @@ import android.os.Environment;
 import android.util.Log;
 import android.util.TypedValue;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+
+import static com.example.abhisheksingh.fireapp.Helpers.Constants.baseUrl;
 
 public class Utils {
     public static int dpToPx(Context context, int dp) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
     }
 
+    public static Boolean isBlank(String str)
+    {
+    if ((str == null) || (str.isEmpty())) {
+        return  true;
+    }
+    else {
+        return  false;
+    }
+
+    }
+    
     public static void writeToFile(String data,File path,String name)
     {
         // Get the directory for the user's public pictures directory.

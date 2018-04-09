@@ -11,6 +11,12 @@
     </group>
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/nav_reports"
+            android:icon="@drawable/ic_reports"
+            android:title="Reports" />
+    </group>
+    <group android:checkableBehavior="single">
+        <item
             android:id="@+id/nav_stock"
             android:icon="@drawable/ic_stock"
             android:title="Stock" />
@@ -21,12 +27,7 @@
             android:icon="@drawable/ic_imp_issue"
             android:title="Important Issue" />
     </group>
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_reports"
-            android:icon="@drawable/ic_reports"
-            android:title="Reports" />
-    </group>
+
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_logout"

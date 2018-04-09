@@ -39,6 +39,7 @@ import java.util.Map;
 
 import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
 import static com.example.abhisheksingh.fireapp.Helpers.Constants.baseUrl;
+import static com.example.abhisheksingh.fireapp.Helpers.Constants.reports;
 
 
 /**
@@ -65,7 +66,7 @@ public class EditReportDataFragment extends Fragment implements EditDataAdapter.
         View view = inflater.inflate(R.layout.fragment_edit_report_data,container,false);
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
         btnShareData = view.findViewById(R.id.btn_share);
-        globaRef = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.baseUrl);
+        globaRef = FirebaseDatabase.getInstance().getReferenceFromUrl(Constants.baseUrl + reports);
         mProgressBar = view.findViewById(R.id.progress_bar);
         mProgressBar.setVisibility(View.VISIBLE);
         editDataAdapter = new EditDataAdapter(getActivity(),new ArrayList<RepairData>(),this);

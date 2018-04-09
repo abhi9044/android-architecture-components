@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.abhisheksingh.fireapp.Adapters.RepairDataAdapter;
+import com.example.abhisheksingh.fireapp.Helpers.Constants;
 import com.example.abhisheksingh.fireapp.Models.RepairData;
 import com.example.abhisheksingh.fireapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,6 +47,7 @@ import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
 import static com.example.abhisheksingh.fireapp.Helpers.Constants.baseUrl;
 
 public class RepairDataFragment extends Fragment implements View.OnClickListener{
+    private static final String TAG = RepairDataFragment.class.getSimpleName() ;
     private Button btnSendData;
     private EditText edtHallNumber;
     private EditText edtDoors;
@@ -107,7 +110,7 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
         radioGroup = view.findViewById(R.id.radiogroup);
         spnrWork.setItems(getResources().getStringArray(R.array.work));
         recyclerView = view.findViewById(R.id.recyclerView);
-        globaRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl);
+        globaRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl + Constants.reports);
         firebaseStorage = FirebaseStorage.getInstance();
         mProgressBar = view.findViewById(R.id.progress_bar);
         repairDataAdapter = new RepairDataAdapter(getActivity(),new ArrayList<RepairData>());
@@ -247,7 +250,7 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
     }
 
     private void writeData(RepairData data) {
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl + data.hallId);
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl+ Constants.reports + data.hallId);
         myRef.setValue(data);
         mProgressBar.setVisibility(View.GONE);
         Toast.makeText(getActivity(),"Data Updated Successfully",Toast.LENGTH_SHORT).show();
