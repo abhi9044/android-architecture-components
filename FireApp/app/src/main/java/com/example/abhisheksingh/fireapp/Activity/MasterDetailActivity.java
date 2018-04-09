@@ -1,4 +1,4 @@
-package com.example.abhisheksingh.fireapp;
+package com.example.abhisheksingh.fireapp.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +17,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.abhisheksingh.fireapp.Fragments.EditReportDataFragment;
+import com.example.abhisheksingh.fireapp.R;
+import com.example.abhisheksingh.fireapp.Fragments.RepairDataFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -58,6 +61,10 @@ public class MasterDetailActivity extends AppCompatActivity implements Navigatio
             /*View view=navigationView.inflateHeaderView(R.layout.nav_header_main);*/
             phoneNumber = (TextView)header.findViewById(R.id.tv_phone_num);
             phoneNumber.setText(user.getPhoneNumber());
+            if (user.getDisplayName() == null || user.getEmail() == null)
+            {
+
+            }
         }
         else
         {

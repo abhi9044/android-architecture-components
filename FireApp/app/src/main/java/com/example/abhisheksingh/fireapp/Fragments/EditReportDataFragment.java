@@ -1,16 +1,14 @@
-package com.example.abhisheksingh.fireapp;
+package com.example.abhisheksingh.fireapp.Fragments;
 
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.RecoverySystem;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +16,13 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.abhisheksingh.fireapp.Adapters.EditDataAdapter;
+import com.example.abhisheksingh.fireapp.CSVUtils.CSVWriters;
+import com.example.abhisheksingh.fireapp.CSVUtils.JsonFlattener;
+import com.example.abhisheksingh.fireapp.Helpers.Constants;
+import com.example.abhisheksingh.fireapp.Helpers.Utils;
+import com.example.abhisheksingh.fireapp.Models.RepairData;
+import com.example.abhisheksingh.fireapp.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 
 import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
-import static com.example.abhisheksingh.fireapp.Constants.baseUrl;
+import static com.example.abhisheksingh.fireapp.Helpers.Constants.baseUrl;
 
 
 /**
@@ -52,7 +57,6 @@ public class EditReportDataFragment extends Fragment implements EditDataAdapter.
     public EditReportDataFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,35 +82,6 @@ public class EditReportDataFragment extends Fragment implements EditDataAdapter.
                     repairDataList.add(repairData.getValue(RepairData.class));
                 }
                 editDataAdapter.setData(repairDataList);
-                Gson gson = new Gson();
-                String reqJson= gson.toJson(repairDataList);
-
-                JsonFlattener parser = new JsonFlattener();
-                CSVWriters writer = new CSVWriters();
-
-                List<Map<String, String>> flatJson = null;
-                File pathToExternalStorage = Environment.getExternalStorageDirectory();
-                //to this path add a new directory path and create new App dir (InstroList) in /documents Dir
-
-                try {
-                    flatJson = parser.parseJson(reqJson);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    String filename = System.currentTimeMillis()+"sample.csv";
-                  String output = writer.writeAsCSV(flatJson,"");
-                  path =
-                            Environment.getExternalStoragePublicDirectory
-                                    (
-                                            //Environment.DIRECTORY_PICTURES
-                                            Environment.DIRECTORY_DCIM + "/CSV/"
-                                    );
-                  name = System.currentTimeMillis()+"MyFusion.csv";
-                  Utils.writeToFile(output,path,name);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
                 mProgressBar.setVisibility(View.GONE);
             }
 
@@ -120,6 +95,7 @@ public class EditReportDataFragment extends Fragment implements EditDataAdapter.
 btnShareData.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
+        generateCSV();
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
         emailIntent.setType("text/plain");
         emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[] {"apoorv111221cse@gmail.com"});
@@ -136,6 +112,36 @@ btnShareData.setOnClickListener(new View.OnClickListener() {
     }
 });
         return view;
+    }
+
+    private void generateCSV() {
+        Gson gson = new Gson();
+        String reqJson= gson.toJson(repairDataList);
+
+        JsonFlattener parser = new JsonFlattener();
+        CSVWriters writer = new CSVWriters();
+
+        List<Map<String, String>> flatJson = null;
+        //to this path add a new directory path and create new App dir (InstroList) in /documents Dir
+
+        try {
+            flatJson = parser.parseJson(reqJson);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            String output = writer.writeAsCSV(flatJson,"");
+            path =
+                    Environment.getExternalStoragePublicDirectory
+                            (
+                                    //Environment.DIRECTORY_PICTURES
+                                    Environment.DIRECTORY_DCIM + "/CSV/"
+                            );
+            name = System.currentTimeMillis()+"MyFusion.csv";
+            Utils.writeToFile(output,path,name);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 

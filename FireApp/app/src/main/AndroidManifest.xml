@@ -21,12 +21,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
-            android:name=".MasterDetailActivity"
+            android:name=".Activity.MasterDetailActivity"
             android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activity.LoginActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

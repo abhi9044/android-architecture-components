@@ -7,7 +7,7 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:background="@drawable/bg"
-    tools:context=".LoginActivity">
+    tools:context=".Activity.LoginActivity">
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -61,7 +61,7 @@
                 android:id="@+id/edt_otp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Please enter 4 digit otp"
+                android:hint="Please enter 6 digit otp"
                 android:inputType="number"
                 android:maxLength="6"
                 android:visibility="gone"
@@ -69,7 +69,6 @@
                 app:met_maxCharacters="6" />
 
         </LinearLayout>
-
 
         <Button
             android:id="@+id/btn_login"

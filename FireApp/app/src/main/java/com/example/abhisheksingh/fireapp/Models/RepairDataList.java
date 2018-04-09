@@ -1,5 +1,6 @@
-package com.example.abhisheksingh.fireapp;
+package com.example.abhisheksingh.fireapp.Models;
 
+import com.example.abhisheksingh.fireapp.Models.RepairData;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.util.List;

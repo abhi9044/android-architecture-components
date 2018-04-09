@@ -1,4 +1,4 @@
-package com.example.abhisheksingh.fireapp;
+package com.example.abhisheksingh.fireapp.Models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 

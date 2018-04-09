@@ -1,8 +1,6 @@
-package com.example.abhisheksingh.fireapp;
+package com.example.abhisheksingh.fireapp.Fragments;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +19,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.abhisheksingh.fireapp.Adapters.RepairDataAdapter;
+import com.example.abhisheksingh.fireapp.Models.RepairData;
+import com.example.abhisheksingh.fireapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,17 +35,14 @@ import com.google.firebase.storage.UploadTask;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
 import static android.support.v7.widget.LinearLayoutManager.VERTICAL;
-import static com.example.abhisheksingh.fireapp.Constants.baseUrl;
+import static com.example.abhisheksingh.fireapp.Helpers.Constants.baseUrl;
 
 public class RepairDataFragment extends Fragment implements View.OnClickListener{
     private Button btnSendData;

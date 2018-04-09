@@ -1,4 +1,4 @@
-package com.example.abhisheksingh.fireapp;
+package com.example.abhisheksingh.fireapp.Helpers;
 
 import android.content.Context;
 import android.os.Environment;
