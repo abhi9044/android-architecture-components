@@ -38,6 +38,7 @@ public class CustomDialogForStocks extends Dialog implements
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.custom_dialog_for_stocks);
         btnSave = findViewById(R.id.btn_save);
+        btnCancel = findViewById(R.id.btn_cancel);
         edtName = findViewById(R.id.edt_name);
         edtItem = findViewById(R.id.edt_item);
         edtInQuantity = findViewById(R.id.edt_in_quantity);
