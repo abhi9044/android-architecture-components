@@ -1,9 +1,12 @@
 package com.example.abhisheksingh.fireapp.Fragments;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -198,7 +201,9 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
          radioGroup.removeAllViews();
          for (int row = 0; row < 1; row++) {
             RadioGroup ll = new RadioGroup(getActivity());
-            ll.setOrientation(LinearLayout.VERTICAL);
+
+
+             ll.setOrientation(LinearLayout.VERTICAL);
              array = new String[0];
             switch (option)
             {
@@ -219,7 +224,22 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
             }
 
             for (int i = 0; i < array.length; i++) {
+                ColorStateList colorStateList = new ColorStateList(
+                        new int[][]{
+
+                                new int[]{-android.R.attr.state_enabled}, //disabled
+                                new int[]{android.R.attr.state_enabled} //enabled
+                        },
+                        new int[] {
+
+                                Color.BLACK //disabled
+                                ,Color.WHITE //enabled
+
+                        }
+                );
                 RadioButton rdbtn = new RadioButton(getActivity());
+                rdbtn.setTextColor(ContextCompat.getColor(getContext(),R.color.ds_list_bg));
+                rdbtn.setButtonTintList(colorStateList);
                 rdbtn.setId(i);
                 rdbtn.setText(array[i]);
                 ll.addView(rdbtn);

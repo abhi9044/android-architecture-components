@@ -157,13 +157,13 @@ btnShareData.setOnClickListener(new View.OnClickListener() {
     }
 
     private void deleteData(RepairData data) {
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl + data.hallId);
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl +Constants.reports+ data.hallId);
         myRef.removeValue();
         Toast.makeText(getActivity(),"Data deleted successfully",Toast.LENGTH_LONG);
 
     }
     private void writeData(RepairData data) {
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl + data.hallId);
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReferenceFromUrl(baseUrl +Constants.reports+ data.hallId);
         myRef.setValue(data);
         Toast.makeText(getActivity(),"Data Updated Successfully",Toast.LENGTH_SHORT).show();
     }
