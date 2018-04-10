@@ -62,7 +62,6 @@ public class EditDataAdapter extends RecyclerView.Adapter<EditDataAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-    @SuppressLint("StringFormatMatches")
     private void initializeViews(RepairData data, ViewHolder holder) {
         holder.edtHallId.setText(data.hallId);
         // holder.edtUnRepairedData.setText(context.getString(R.string.next_line,data.workCat1,data.workCat2,data.workCat3));

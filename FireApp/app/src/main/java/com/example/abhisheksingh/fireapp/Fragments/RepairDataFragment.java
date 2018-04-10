@@ -111,14 +111,14 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
         mProgressBar.setVisibility(View.GONE);
         btnSendData.setOnClickListener(this);
         imgButton.setOnClickListener(this);
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                RadioButton checkedRadioButton = radioGroup.findViewById(i);
-                workCat4 = checkedRadioButton.getText().toString();
-
-            }
-        });
+//        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+//                RadioButton checkedRadioButton = radioGroup.findViewById(i);
+//                workCat4 = checkedRadioButton.getText().toString();
+//
+//            }
+//        });
         spnrWork.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
@@ -224,6 +224,12 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
                 rdbtn.setText(array[i]);
                 ll.addView(rdbtn);
             }
+            ll.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                    workCat4 = array[i];
+                }
+            });
           radioGroup.addView(ll);
         }
 
