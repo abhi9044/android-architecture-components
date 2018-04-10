@@ -20,6 +20,7 @@ public class CustomDialogForStocks extends Dialog implements
     public Activity activity;
     public DialogSaveClickedListener dialogSaveClicked;
     public Button btnSave;
+    public Button btnCancel;
     private EditText edtName;
     private EditText edtItem;
     private EditText edtInQuantity;
@@ -42,6 +43,7 @@ public class CustomDialogForStocks extends Dialog implements
         edtInQuantity = findViewById(R.id.edt_in_quantity);
         edtOutQuantity = findViewById(R.id.edt_out_quantity);
         btnSave.setOnClickListener(this);
+        btnCancel.setOnClickListener(this);
     }
 
     @Override
@@ -51,6 +53,7 @@ public class CustomDialogForStocks extends Dialog implements
                 Stock stock = new Stock();
                 stock.setId(String.valueOf(System.currentTimeMillis()));
                 stock.setVendor(edtName.getText().toString());
+                stock.setItem(edtItem.getText().toString());
                 stock.setInQuantity(Integer.parseInt(edtInQuantity.getText().toString()));
                 stock.setOutQuantity(Integer.parseInt(edtOutQuantity.getText().toString()));
                 dialogSaveClicked.onDialogSaveButtonClicked(stock);
