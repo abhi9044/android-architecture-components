@@ -49,10 +49,6 @@ import static com.example.abhisheksingh.fireapp.Helpers.Constants.baseUrl;
 public class RepairDataFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = RepairDataFragment.class.getSimpleName() ;
     private Button btnSendData;
-    private EditText edtHallNumber;
-    private EditText edtDoors;
-    private EditText edtChairs;
-    private EditText edtTables;
     private RecyclerView recyclerView;
     private DatabaseReference globaRef;
     private ProgressBar mProgressBar;
@@ -97,10 +93,6 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
         // Inflate the layout for this fragment
         View view =   inflater.inflate(R.layout.fragment_repair_data, container, false);
         btnSendData = view.findViewById(R.id.btnSendData);
-        edtHallNumber = view.findViewById(R.id.edtHallId);
-        edtChairs = view.findViewById(R.id.edtUnRepairedChairs);
-        edtTables = view.findViewById(R.id.edtUnrepairedTables);
-        edtDoors = view.findViewById(R.id.edtUnRepairedDoors);
         edtIssueDescription = view.findViewById(R.id.edt_issue_description);
         imgButton = view.findViewById(R.id.img_take_picture);
         imgIssue = view.findViewById(R.id.img_issue);
@@ -117,7 +109,7 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
         repairDataAdapter.setData(new ArrayList<RepairData>());
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), VERTICAL,false));
         recyclerView.setAdapter(repairDataAdapter);
-        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
         btnSendData.setOnClickListener(this);
         imgButton.setOnClickListener(this);
         spnrWork.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
@@ -187,25 +179,25 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
                }
            }
        });
-        Query myTopPostsQuery = globaRef;
-        myTopPostsQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                repairDataList = new ArrayList<>();
-                for (DataSnapshot repairData: dataSnapshot.getChildren()) {
-                    repairDataList.add(repairData.getValue(RepairData.class));
-                }
-                repairDataAdapter.setData(repairDataList);
-                mProgressBar.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-            // TODO: implement the ChildEventListener methods as documented above
-            // ...
-        });
+//        Query myTopPostsQuery = globaRef;
+//        myTopPostsQuery.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                repairDataList = new ArrayList<>();
+//                for (DataSnapshot repairData: dataSnapshot.getChildren()) {
+//                    repairDataList.add(repairData.getValue(RepairData.class));
+//                }
+//                repairDataAdapter.setData(repairDataList);
+//                mProgressBar.setVisibility(View.INVISIBLE);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//            // TODO: implement the ChildEventListener methods as documented above
+//            // ...
+//        });
 
         return view;
     }

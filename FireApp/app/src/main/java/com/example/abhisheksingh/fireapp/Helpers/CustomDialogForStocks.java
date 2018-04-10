@@ -16,25 +16,26 @@ import com.example.abhisheksingh.fireapp.R;
 public class CustomDialogForStocks extends Dialog implements
         android.view.View.OnClickListener {
 
-    public Activity activity;
     public Dialog dialog;
+    public Activity activity;
     public DialogSaveClickedListener dialogSaveClicked;
     public Button btnSave;
     private EditText edtName;
     private EditText edtItem;
     private EditText edtInQuantity;
     private EditText edtOutQuantity;
-    public CustomDialogForStocks(Activity activity) {
+
+    public CustomDialogForStocks(Activity activity,DialogSaveClickedListener fragment) {
         super(activity);
         this.activity = activity;
-        dialogSaveClicked = (DialogSaveClickedListener) activity;
+        dialogSaveClicked = fragment;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.custom_dialog);
+        setContentView(R.layout.custom_dialog_for_stocks);
         btnSave = findViewById(R.id.btn_save);
         edtName = findViewById(R.id.edt_name);
         edtItem = findViewById(R.id.edt_item);

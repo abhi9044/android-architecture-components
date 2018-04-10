@@ -9,7 +9,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.abhisheksingh.fireapp.Fragments.EditReportDataFragment;
+import com.example.abhisheksingh.fireapp.Fragments.StockDataFragment;
 import com.example.abhisheksingh.fireapp.Helpers.Constants;
 import com.example.abhisheksingh.fireapp.Helpers.CustomDialog;
 import com.example.abhisheksingh.fireapp.Helpers.Utils;
@@ -38,7 +38,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import pl.aprilapps.easyphotopicker.DefaultCallback;
 import pl.aprilapps.easyphotopicker.EasyImage;
 
@@ -154,7 +153,7 @@ public class MasterDetailActivity extends AppCompatActivity implements Navigatio
         if (id == R.id.nav_work) {
             loadFragment(new RepairDataFragment());
         } else if (id == R.id.nav_stock) {
-            loadFragment(new EditReportDataFragment());
+            loadFragment(new StockDataFragment());
 
         }
         else if (id == R.id.nav_reports) {
