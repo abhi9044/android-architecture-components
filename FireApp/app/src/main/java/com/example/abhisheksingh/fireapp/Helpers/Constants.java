@@ -6,4 +6,5 @@ public class Constants {
     public final static String userProfile = "userProfile/";
     public final static String reports = "reports/";
     public final static String stocks = "stocks/";
+    public final static String importantIssue = "importantIssue/";
 }

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +24,8 @@ import com.example.abhisheksingh.fireapp.Helpers.Constants;
 import com.example.abhisheksingh.fireapp.Models.RepairData;
 import com.example.abhisheksingh.fireapp.R;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -48,6 +43,7 @@ import static com.example.abhisheksingh.fireapp.Helpers.Constants.baseUrl;
 
 public class RepairDataFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = RepairDataFragment.class.getSimpleName() ;
+    private static final int IMG_REPAIR_PIC_CODE = 1111;
     private Button btnSendData;
     private RecyclerView recyclerView;
     private DatabaseReference globaRef;
@@ -60,6 +56,9 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
     private String workCat1;
     private String workCat2;
     private String workCat3;
+    private String workCat4;
+    private int selecteedId;
+    private String[] array;
     private File file;
     private EditText edtIssueDescription;
     private RadioGroup radioGroup;
@@ -112,6 +111,14 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
         mProgressBar.setVisibility(View.GONE);
         btnSendData.setOnClickListener(this);
         imgButton.setOnClickListener(this);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                RadioButton checkedRadioButton = radioGroup.findViewById(i);
+                workCat4 = checkedRadioButton.getText().toString();
+
+            }
+        });
         spnrWork.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
@@ -179,25 +186,6 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
                }
            }
        });
-//        Query myTopPostsQuery = globaRef;
-//        myTopPostsQuery.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                repairDataList = new ArrayList<>();
-//                for (DataSnapshot repairData: dataSnapshot.getChildren()) {
-//                    repairDataList.add(repairData.getValue(RepairData.class));
-//                }
-//                repairDataAdapter.setData(repairDataList);
-//                mProgressBar.setVisibility(View.INVISIBLE);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//            // TODO: implement the ChildEventListener methods as documented above
-//            // ...
-//        });
 
         return view;
     }
@@ -211,7 +199,7 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
          for (int row = 0; row < 1; row++) {
             RadioGroup ll = new RadioGroup(getActivity());
             ll.setOrientation(LinearLayout.VERTICAL);
-             String []array = new String[0];
+             array = new String[0];
             switch (option)
             {
                 case ("INFRASTRUCTURE"):
@@ -232,7 +220,7 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
 
             for (int i = 0; i < array.length; i++) {
                 RadioButton rdbtn = new RadioButton(getActivity());
-                rdbtn.setId((row * 2) + i);
+                rdbtn.setId(i);
                 rdbtn.setText(array[i]);
                 ll.addView(rdbtn);
             }
@@ -278,10 +266,12 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
 
             @Override
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
-                file = imageFile;
-                Uri uri = Uri.fromFile(imageFile);
-                imgIssue.setImageURI(uri);
-                imgIssue.setVisibility(View.VISIBLE);
+                if (type == IMG_REPAIR_PIC_CODE) {
+                    file = imageFile;
+                    Uri uri = Uri.fromFile(imageFile);
+                    imgIssue.setImageURI(uri);
+                    imgIssue.setVisibility(View.VISIBLE);
+                }
             }
 
         });
@@ -298,6 +288,7 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
                 data.workCat1 = workCat1;
                 data.workCat2 = workCat2;
                 data.workCat3 = workCat3;
+                data.workCat4 = workCat4;
                 data.issueDescription = edtIssueDescription.getText().toString();
                 storageReference = firebaseStorage.getReference( "images");
                 final StorageReference photoRef = storageReference.child(data.hallId);
@@ -312,7 +303,7 @@ public class RepairDataFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.img_take_picture:
-                EasyImage.openChooserWithGallery(this,"Select",0);
+                EasyImage.openChooserWithGallery(this, "Select", IMG_REPAIR_PIC_CODE);
         }
     }
 

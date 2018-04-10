@@ -6,11 +6,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -18,18 +17,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.abhisheksingh.fireapp.Fragments.EditReportDataFragment;
+import com.example.abhisheksingh.fireapp.Fragments.ImportantIssueDataFragment;
+import com.example.abhisheksingh.fireapp.Fragments.RepairDataFragment;
 import com.example.abhisheksingh.fireapp.Fragments.StockDataFragment;
 import com.example.abhisheksingh.fireapp.Helpers.Constants;
 import com.example.abhisheksingh.fireapp.Helpers.CustomDialog;
 import com.example.abhisheksingh.fireapp.Helpers.Utils;
 import com.example.abhisheksingh.fireapp.Models.UserProfile;
 import com.example.abhisheksingh.fireapp.R;
-import com.example.abhisheksingh.fireapp.Fragments.RepairDataFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -161,7 +162,7 @@ public class MasterDetailActivity extends AppCompatActivity implements Navigatio
 
         }
         else if (id == R.id.nav_imp_issue) {
-            loadFragment(new EditReportDataFragment());
+            loadFragment(new ImportantIssueDataFragment());
 
         } else if (id == R.id.nav_logout) {
          logout();
@@ -203,6 +204,7 @@ public class MasterDetailActivity extends AppCompatActivity implements Navigatio
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         EasyImage.handleActivityResult(requestCode, resultCode, data, MasterDetailActivity.this, new DefaultCallback() {
             @Override
             public void onImagePickerError(Exception e, EasyImage.ImageSource source, int type) {
@@ -212,10 +214,13 @@ public class MasterDetailActivity extends AppCompatActivity implements Navigatio
 
             @Override
             public void onImagePicked(File imageFile, EasyImage.ImageSource source, int type) {
-                Uri uri = Uri.fromFile(imageFile);
-                imgProfile.setImageURI(uri);
-                imgProfile.setVisibility(View.VISIBLE);
-                FirebaseAuth.getInstance().getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(uri).build());
+                if (type == PROFILE_PIC_CODE) {
+                    Uri uri = Uri.fromFile(imageFile);
+                    imgProfile.setImageURI(uri);
+                    imgProfile.setVisibility(View.VISIBLE);
+                    FirebaseAuth.getInstance().getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(uri).build());
+
+                }
             }
 
         });

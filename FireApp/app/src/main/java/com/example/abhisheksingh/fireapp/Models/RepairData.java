@@ -2,8 +2,6 @@ package com.example.abhisheksingh.fireapp.Models;
 
 import com.google.firebase.database.IgnoreExtraProperties;
 
-import java.io.File;
-
 /**
  * Created by abhisheksingh on 03/04/18.
  */
@@ -15,6 +13,7 @@ public class RepairData {
     public String workCat1 = "";
     public String workCat2 = "";
     public String workCat3 = "";
+    public String workCat4 = "";
     public String issueDescription = "";
     public String imageUrl;
     public Boolean isPending = true;
@@ -50,6 +49,14 @@ public class RepairData {
 
     public void setIssueDescription(String issueDescription) {
         this.issueDescription = issueDescription;
+    }
+
+    public String getWorkCat4() {
+        return workCat4;
+    }
+
+    public void setWorkCat4(String workCat4) {
+        this.workCat4 = workCat4;
     }
 
     public String getImageUrl() {

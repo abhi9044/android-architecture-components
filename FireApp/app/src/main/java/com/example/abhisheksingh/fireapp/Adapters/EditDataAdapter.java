@@ -1,20 +1,21 @@
 package com.example.abhisheksingh.fireapp.Adapters;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.example.abhisheksingh.fireapp.Models.RepairData;
 import com.example.abhisheksingh.fireapp.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditDataAdapter extends RecyclerView.Adapter<EditDataAdapter.ViewHolder> {
 
@@ -61,17 +62,16 @@ public class EditDataAdapter extends RecyclerView.Adapter<EditDataAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    @SuppressLint("StringFormatMatches")
     private void initializeViews(RepairData data, ViewHolder holder) {
         holder.edtHallId.setText(data.hallId);
-        holder.edtUnRepairedChairs.setText(data.workCat1+"");
-        holder.edtUnrepairedTables.setText(data.workCat2+"");
-        holder.edtUnRepairedDoors.setText(data.workCat3+"");
+        // holder.edtUnRepairedData.setText(context.getString(R.string.next_line,data.workCat1,data.workCat2,data.workCat3));
+        holder.edtUnRepairedData.setText(data.workCat1 + System.getProperty("line.separator") + data.workCat2 + System.getProperty("line.separator") + data.workCat3);
+        holder.edtUnRepairedDoors.setText(data.workCat4);
         if (data.isPending){
             holder.btnEdit.setBackground(context.getResources().getDrawable(R.drawable.button_bg_red));
             holder.btnEdit.setText("Mark Completed");
-        }
-        else
-        {
+        } else {
             holder.btnEdit.setBackground(context.getResources().getDrawable(R.drawable.button_bg_green));
             holder.btnEdit.setText("Completed");
         }
@@ -81,7 +81,7 @@ public class EditDataAdapter extends RecyclerView.Adapter<EditDataAdapter.ViewHo
 
     protected class ViewHolder extends RecyclerView.ViewHolder {
         private TextView edtHallId;
-        private TextView edtUnRepairedChairs;
+        private TextView edtUnRepairedData;
         private TextView edtUnRepairedDoors;
         private TextView edtUnrepairedTables;
         private Button btnEdit;
@@ -91,7 +91,7 @@ public class EditDataAdapter extends RecyclerView.Adapter<EditDataAdapter.ViewHo
         public ViewHolder(View view) {
             super(view);
             edtHallId = view.findViewById(R.id.edt_hall_id);
-            edtUnRepairedChairs = view.findViewById(R.id.edt_seats);
+            edtUnRepairedData = view.findViewById(R.id.edt_seats);
             edtUnRepairedDoors = view.findViewById(R.id.edt_doors);
             edtUnrepairedTables =  view.findViewById(R.id.edt_tables);
             btnEdit = view.findViewById(R.id.btn_edit);
@@ -117,7 +117,7 @@ public class EditDataAdapter extends RecyclerView.Adapter<EditDataAdapter.ViewHo
                 public void onClick(View view) {
                     btnEdit.setText("Edit");
                     btnDelete.setVisibility(View.GONE);
-                    edtUnRepairedChairs.setEnabled(false);
+                    edtUnRepairedData.setEnabled(false);
                     edtUnRepairedDoors.setEnabled(false);
                     edtUnrepairedTables.setEnabled(false);
                     lnrBg.setBackgroundColor(Color.WHITE);
