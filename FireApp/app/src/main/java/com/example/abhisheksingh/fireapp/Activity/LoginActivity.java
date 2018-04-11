@@ -39,8 +39,7 @@ public class LoginActivity extends Activity{
     private Button btnHandleOtp;
     private String verificationId;
     private ProgressBar mProgressBar;
-
-
+    
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
